@@ -61,6 +61,14 @@ class StarWarsController extends Controller
         try {
             $person = $this->client->getPerson($id);
         } catch (RuntimeException $e) {
+            if ($e->getCode() === 404) {
+                return response()->json([
+                    'error' => 'not_found',
+                    'resource' => 'person',
+                    'id' => $id,
+                ], 404);
+            }
+
             return response()->json([
                 'error' => 'upstream_unavailable',
                 'message' => $e->getMessage(),
@@ -82,6 +90,14 @@ class StarWarsController extends Controller
         try {
             $movie = $this->client->getMovie($id);
         } catch (RuntimeException $e) {
+            if ($e->getCode() === 404) {
+                return response()->json([
+                    'error' => 'not_found',
+                    'resource' => 'movie',
+                    'id' => $id,
+                ], 404);
+            }
+
             return response()->json([
                 'error' => 'upstream_unavailable',
                 'message' => $e->getMessage(),

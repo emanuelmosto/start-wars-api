@@ -3,6 +3,7 @@
 namespace App\Services\Swapi;
 
 use Illuminate\Http\Client\ConnectionException;
+use Illuminate\Http\Client\RequestException;
 use Illuminate\Support\Arr;
 use Illuminate\Support\Facades\Cache;
 use Illuminate\Support\Facades\Http;
@@ -248,9 +249,22 @@ class SwapiClient
             ]);
 
             throw new RuntimeException('SWAPI connection error', 0, $e);
+        } catch (RequestException $e) {
+            $response = $e->response;
         }
 
         $durationMs = (int) ((microtime(true) - $start) * 1000);
+
+        if ($response->status() === 404) {
+            Log::info('SWAPI resource not found', [
+                'url' => $url,
+                'query' => $query,
+                'status' => $response->status(),
+                'duration_ms' => $durationMs,
+            ]);
+
+            throw new RuntimeException('SWAPI resource not found', 404);
+        }
 
         if (! $response->successful()) {
             Log::warning('SWAPI non-success response', [
@@ -261,7 +275,7 @@ class SwapiClient
                 'body' => $response->body(),
             ]);
 
-            throw new RuntimeException(sprintf('SWAPI error: HTTP %d', $response->status()));
+            throw new RuntimeException(sprintf('SWAPI error: HTTP %d', $response->status()), $response->status());
         }
 
         $data = $response->json();
