@@ -6,6 +6,7 @@ use Illuminate\Http\Client\ConnectionException;
 use Illuminate\Support\Arr;
 use Illuminate\Support\Facades\Cache;
 use Illuminate\Support\Facades\Http;
+use Illuminate\Support\Facades\Log;
 use RuntimeException;
 
 class SwapiClient
@@ -13,12 +14,16 @@ class SwapiClient
     private string $baseUri;
     private int $timeoutSeconds;
     private int $cacheTtlMinutes;
+    private int $retries;
+    private int $retrySleepMs;
 
     public function __construct()
     {
         $this->baseUri = rtrim(config('services.swapi.base_uri'), '/');
         $this->timeoutSeconds = (int) config('services.swapi.timeout', 5);
         $this->cacheTtlMinutes = (int) config('services.swapi.cache_ttl_minutes', 60);
+        $this->retries = (int) config('services.swapi.retries', 2);
+        $this->retrySleepMs = (int) config('services.swapi.retry_sleep_ms', 200);
     }
 
 
@@ -213,23 +218,71 @@ class SwapiClient
     {
         $url = $this->baseUri . $path;
 
+        $start = microtime(true);
+
         try {
-            $response = Http::timeout($this->timeoutSeconds)
+            $response = Http::retry(
+                $this->retries,
+                $this->retrySleepMs,
+                function ($exception, $request) {
+                    if ($exception instanceof ConnectionException) {
+                        return true;
+                    }
+
+                    $response = $request->response ?? null;
+
+                    return $response && ($response->serverError() || $response->tooManyRequests());
+                }
+            )
+                ->timeout($this->timeoutSeconds)
                 ->acceptJson()
                 ->get($url, $query);
         } catch (ConnectionException $e) {
+            Log::error('SWAPI connection error', [
+                'url' => $url,
+                'query' => $query,
+                'timeout' => $this->timeoutSeconds,
+                'retries' => $this->retries,
+                'retry_sleep_ms' => $this->retrySleepMs,
+                'exception' => $e->getMessage(),
+            ]);
+
             throw new RuntimeException('SWAPI connection error', 0, $e);
         }
 
+        $durationMs = (int) ((microtime(true) - $start) * 1000);
+
         if (! $response->successful()) {
+            Log::warning('SWAPI non-success response', [
+                'url' => $url,
+                'query' => $query,
+                'status' => $response->status(),
+                'duration_ms' => $durationMs,
+                'body' => $response->body(),
+            ]);
+
             throw new RuntimeException(sprintf('SWAPI error: HTTP %d', $response->status()));
         }
 
         $data = $response->json();
 
         if (! is_array($data)) {
+            Log::error('SWAPI returned invalid JSON structure', [
+                'url' => $url,
+                'query' => $query,
+                'duration_ms' => $durationMs,
+                'raw' => $response->body(),
+            ]);
+
             throw new RuntimeException('SWAPI returned invalid JSON structure');
         }
+
+        Log::info('SWAPI request successful', [
+            'url' => $url,
+            'query' => $query,
+            'status' => $response->status(),
+            'duration_ms' => $durationMs,
+        ]);
 
         return $data;
     }
