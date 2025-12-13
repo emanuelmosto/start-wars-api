@@ -31,6 +31,8 @@ bootstrap: composer-install env
 	$(DC) up -d --build
 	$(DC) exec $(APP) php artisan key:generate --force
 	$(DC) exec $(APP) sh -lc "php artisan storage:link || true"
+	@echo "Waiting for DB and running migrations..."
+	@$(DC) exec $(APP) sh -lc 'for i in 1 2 3 4 5 6 7 8 9 10; do php artisan migrate --force && exit 0; echo Migration\ failed,\ retrying\ in\ 2s...; sleep 2; done; echo Migration\ failed\ after\ retries; exit 1'
 
 up: bootstrap
 	$(DC) exec $(APP) npm install

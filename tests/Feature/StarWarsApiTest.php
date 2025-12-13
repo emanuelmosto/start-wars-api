@@ -118,4 +118,44 @@ class StarWarsApiTest extends TestCase
                 'error' => 'route_not_found',
             ]);
     }
+
+    public function test_stats_returns_default_payload_when_no_snapshot(): void
+    {
+        Cache::forget('search_stats:latest');
+
+        $response = $this->getJson('/api/stats');
+
+        $response
+            ->assertStatus(200)
+            ->assertJson([
+                'total_queries' => 0,
+                'top_queries' => [],
+            ]);
+    }
+
+    public function test_stats_returns_cached_snapshot(): void
+    {
+        $snapshot = [
+            'generated_at' => '2025-12-13T22:00:00Z',
+            'total_queries' => 3,
+            'top_queries' => [
+                [
+                    'query' => 'bi',
+                    'type' => 'people',
+                    'count' => 2,
+                    'percentage' => 2 / 3,
+                ],
+            ],
+            'avg_duration_ms' => 123.4,
+            'popular_hour' => 18,
+        ];
+
+        Cache::put('search_stats:latest', $snapshot);
+
+        $response = $this->getJson('/api/stats');
+
+        $response
+            ->assertStatus(200)
+            ->assertJson($snapshot);
+    }
 }

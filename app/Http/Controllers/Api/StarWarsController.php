@@ -3,6 +3,7 @@
 namespace App\Http\Controllers\Api;
 
 use App\Http\Controllers\Controller;
+use App\Models\SearchQuery;
 use App\Services\Swapi\SwapiClient;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
@@ -31,6 +32,8 @@ class StarWarsController extends Controller
         $type = $validated['type'] ?? 'people';
         $query = $validated['q'];
 
+        $startedAt = microtime(true);
+
         try {
             $results = $type === 'movies'
                 ? $this->client->searchMovies($query)
@@ -40,6 +43,21 @@ class StarWarsController extends Controller
                 'error' => 'upstream_unavailable',
                 'message' => $e->getMessage(),
             ], 502);
+        }
+
+        if (! app()->environment('testing')) {
+            try {
+                $durationMs = (int) round((microtime(true) - $startedAt) * 1000);
+
+                SearchQuery::create([
+                    'type' => $type,
+                    'query' => mb_strtolower($query),
+                    'duration_ms' => $durationMs,
+                    'performed_at' => now(),
+                ]);
+            } catch (\Throwable $e) {
+                // Swallow logging errors to avoid impacting the main search flow.
+            }
         }
 
         return response()->json([
