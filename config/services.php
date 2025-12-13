@@ -39,6 +39,8 @@ return [
         'base_uri' => env('SWAPI_BASE_URI', 'https://swapi.tech/api'),
         'timeout' => env('SWAPI_TIMEOUT', 5),
         'cache_ttl_minutes' => env('SWAPI_CACHE_TTL_MINUTES', 60),
+        'retries' => env('SWAPI_RETRIES', 2),
+        'retry_sleep_ms' => env('SWAPI_RETRY_SLEEP_MS', 200),
     ],
 
 ];

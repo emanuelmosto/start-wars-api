@@ -13,7 +13,7 @@ class RequestIdMiddleware
     {
         $requestId = $request->headers->get('X-Request-Id', (string) Str::uuid());
 
-        // Añadir el request_id al contexto de los logs para toda la request
+        // Let's add the request_id to the request context for logs
         Log::withContext([
             'request_id' => $requestId,
         ]);
@@ -21,7 +21,7 @@ class RequestIdMiddleware
         /** @var \Symfony\Component\HttpFoundation\Response $response */
         $response = $next($request);
 
-        // Propagar el request_id en la respuesta para facilitar el debugging
+        // Propagate the request_id on the response for debugging
         $response->headers->set('X-Request-Id', $requestId);
 
         return $response;
