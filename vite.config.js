@@ -10,4 +10,12 @@ export default defineConfig({
         }),
         vue(),
     ],
+    server: {
+        host: '0.0.0.0',
+        port: Number(process.env.VITE_PORT || 5173),
+        watch: {
+            usePolling: true,
+            interval: 100,
+        },
+    },
 })

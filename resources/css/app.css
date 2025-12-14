@@ -9,3 +9,431 @@
     --font-sans: 'Instrument Sans', ui-sans-serif, system-ui, sans-serif, 'Apple Color Emoji', 'Segoe UI Emoji',
         'Segoe UI Symbol', 'Noto Color Emoji';
 }
+
+/* ---- Global layout for SWStarter SPA ---- */
+
+body {
+    margin: 0;
+    font-family: var(--font-sans);
+    background-color: #f3f3f3;
+}
+
+.app-root {
+    min-height: 100vh;
+    display: flex;
+    flex-direction: column;
+    color: #333333;
+}
+
+.app-topbar {
+    background-color: #ffffff;
+    border-bottom: 1px solid #0ab463;
+    padding: 0.75rem 1.5rem;
+    text-align: center;
+}
+
+.app-logo {
+    display: inline-block;
+    font-family: 'Montserrat', var(--font-sans);
+    font-weight: bold;
+    font-size: 20px;
+    line-height: 1;
+    letter-spacing: normal;
+    color: #0ab463;
+    -webkit-font-smoothing: antialiased;
+    text-rendering: optimizeLegibility;
+}
+
+.app-container {
+    max-width: 1100px;
+    margin: 1.75rem auto 3rem;
+    padding: 0 1rem;
+    width: 100%;
+    box-sizing: border-box;
+}
+
+.app-main {
+    display: flex;
+    align-items: flex-start;
+    gap: 1.75rem;
+}
+
+.card {
+    background-color: #ffffff;
+    border-radius: 4px;
+    border: 1px solid #dedede;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.04);
+}
+
+.search-card {
+    width: 320px;
+    padding: 1.25rem 1.5rem 1.5rem;
+    box-sizing: border-box;
+}
+
+.results-card {
+    flex: 1;
+    padding: 1.25rem 1.75rem 1.5rem;
+    min-height: 320px;
+    box-sizing: border-box;
+}
+
+.details-card {
+    padding: 1.75rem 2rem 1.75rem;
+    box-sizing: border-box;
+}
+
+/* ---- Search panel ---- */
+
+.search-title {
+    font-size: 0.9rem;
+    font-weight: 600;
+    margin: 0 0 0.75rem;
+}
+
+.search-type-toggle {
+    display: flex;
+    gap: 1.5rem;
+    align-items: center;
+    margin-bottom: 0.75rem;
+}
+
+.search-type-toggle label {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.4rem;
+    font-size: 0.9rem;
+}
+
+.search-type-toggle input[type='radio'] {
+    accent-color: #007aff;
+}
+
+.search-form {
+    margin-top: 0.5rem;
+}
+
+.search-input-row {
+    display: flex;
+}
+
+.search-input {
+    flex: 1;
+    padding: 0.6rem 0.75rem;
+    border-radius: 3px;
+    border: 1px solid #cccccc;
+    font-size: 0.9rem;
+    box-sizing: border-box;
+}
+
+.search-input::placeholder {
+    color: #a3a3a3;
+}
+
+.search-button {
+    margin-top: 0.85rem;
+    width: 100%;
+    padding: 0.7rem 1rem;
+    border-radius: 999px;
+    border: none;
+    font-size: 0.85rem;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 0.08em;
+    background-color: #00b55b;
+    color: #ffffff;
+    cursor: pointer;
+}
+
+.search-button:disabled {
+    background-color: #cccccc;
+    cursor: default;
+}
+
+.error-message {
+    margin-top: 0.5rem;
+    font-size: 0.8rem;
+    color: #d32f2f;
+}
+
+/* ---- Results panel ---- */
+
+.results-header {
+    display: flex;
+    flex-direction: column;
+    gap: 0.35rem;
+}
+
+.results-title {
+    font-size: 1rem;
+    font-weight: 600;
+    margin: 0;
+}
+
+.results-divider {
+    height: 1px;
+    background-color: #e5e5e5;
+}
+
+.results-empty {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    padding: 4rem 1rem 2rem;
+    text-align: center;
+    font-size: 0.9rem;
+    color: #b3b3b3;
+}
+
+.results-helper {
+    margin-top: 0.25rem;
+    font-size: 0.8rem;
+}
+
+.results-list {
+    list-style: none;
+    margin: 1.25rem 0 0;
+    padding: 0;
+}
+
+.result-item {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 0.8rem 0;
+    border-bottom: 1px solid #eeeeee;
+}
+
+.result-title {
+    font-size: 0.95rem;
+    font-weight: 500;
+}
+
+.result-button {
+    border-radius: 999px;
+    border: none;
+    padding: 0.45rem 1.4rem;
+    background-color: #00b55b;
+    color: #ffffff;
+    font-size: 0.75rem;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 0.08em;
+    cursor: pointer;
+}
+
+/* ---- Details panels ---- */
+
+.details-header {
+    margin-bottom: 1.25rem;
+}
+
+.details-name {
+    margin: 0;
+    font-size: 1.1rem;
+    font-weight: 600;
+}
+
+.details-body {
+    display: flex;
+    gap: 2rem;
+}
+
+.details-body--two-column .details-column {
+    flex: 1;
+}
+
+.details-section-title {
+    margin: 0;
+    font-size: 0.9rem;
+    font-weight: 600;
+}
+
+.details-section-divider {
+    margin-top: 0.35rem;
+    height: 1px;
+    background-color: #e5e5e5;
+}
+
+.details-list {
+    margin: 0.75rem 0 0;
+}
+
+.details-row {
+    display: flex;
+    gap: 0.35rem;
+    font-size: 0.9rem;
+    margin-bottom: 0.35rem;
+}
+
+.details-row dt {
+    font-weight: 600;
+}
+
+.details-row dd {
+    margin: 0;
+}
+
+.details-links {
+    margin: 0.75rem 0 0;
+    padding: 0;
+    list-style: none;
+    font-size: 0.9rem;
+}
+
+.details-links li {
+    margin-bottom: 0.25rem;
+    color: #0077cc;
+}
+
+.details-muted {
+    color: #999999;
+}
+
+.details-text {
+    margin-top: 0.75rem;
+    font-size: 0.9rem;
+    line-height: 1.5;
+}
+
+.back-primary-button {
+    margin-top: 1.75rem;
+    padding: 0.7rem 1.75rem;
+    border-radius: 999px;
+    border: none;
+    background-color: #00b55b;
+    color: #ffffff;
+    font-size: 0.85rem;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 0.08em;
+    cursor: pointer;
+}
+
+/* ---- Loading overlay ---- */
+
+.loading-overlay {
+    position: fixed;
+    inset: 0;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background: rgba(0, 0, 0, 0.25);
+    z-index: 40;
+}
+
+.loading-spinner {
+    width: 1.75rem;
+    height: 1.75rem;
+    border-radius: 999px;
+    border: 3px solid rgba(255, 255, 255, 0.4);
+    border-top-color: #00b55b;
+    animation: app-spin 0.8s linear infinite;
+}
+
+.loading-text {
+    margin-left: 0.8rem;
+    color: #ffffff;
+    font-size: 0.9rem;
+}
+
+@keyframes app-spin {
+    to {
+        transform: rotate(360deg);
+    }
+}
+
+/* ---- Responsive tweaks ---- */
+
+@media (max-width: 767px) {
+    /* Make the mobile view behave like a full-screen app canvas */
+    body {
+        background-color: #ffffff;
+    }
+
+    .app-root {
+        min-height: 100vh;
+    }
+
+    .app-container {
+        margin: 0 auto;
+        padding: 1.5rem 1.5rem 2.5rem;
+    }
+
+    .app-main {
+        flex-direction: column;
+        min-height: calc(100vh - 56px); /* fill remaining space under topbar */
+    }
+
+    .search-card,
+    .results-card,
+    .details-card {
+        width: 100%;
+    }
+
+    /* In mobile, the search area is not inside a visible card box */
+    .card.search-card {
+        border: none;
+        box-shadow: none;
+        border-radius: 0;
+        padding-left: 0;
+        padding-right: 0;
+        padding-top: 1.5rem;
+        padding-bottom: 0;
+        flex: 1;
+        display: flex;
+        flex-direction: column;
+    }
+
+    /* When no search has been performed yet, hide the results card on mobile
+       so that the layout matches the prototype (only the search panel visible). */
+    .app-root:not(.has-searched) .results-card {
+        display: none;
+    }
+
+    .results-card {
+        margin-top: 1rem;
+    }
+
+    .result-item {
+        flex-direction: column;
+        align-items: flex-start;
+        gap: 0.5rem;
+    }
+
+    .result-button {
+        align-self: stretch;
+        text-align: center;
+    }
+
+    .details-body {
+        flex-direction: column;
+        gap: 1.25rem;
+    }
+
+    /* Mobile-specific tweaks to better match the prototype */
+
+    .search-type-toggle label span {
+        font-weight: 700;
+    }
+
+    /* Make the form stretch so the button can sit near the bottom */
+    .search-form {
+        margin-top: 0.75rem;
+        display: flex;
+        flex-direction: column;
+        flex: 1;
+    }
+
+    .search-input-row {
+        flex-shrink: 0;
+    }
+
+    .search-button {
+        margin-top: auto; /* push to bottom of available space */
+        margin-bottom: 1.75rem;
+        background-color: #7b7b7b;
+        color: #ffffff;
+    }
+}
