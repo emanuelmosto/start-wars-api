@@ -84,13 +84,6 @@
             <p class="results-helper">
               Use the form to search for People or Movies.
             </p>
-              <button
-                  type="button"
-                  class="back-primary-button"
-                  @click="backToSearch"
-              >
-                  Back to search
-              </button>
           </div>
 
           <div
@@ -122,16 +115,13 @@
 
           </ul>
             <button
-                v-if="!isSearching && hasSearched"
+                v-if="!isSearching && hasSearched && (mode === 'person' || mode === 'movie' || isMobile)"
                 type="button"
-                class="result-button strech"
+                class="result-button strech generic"
                 @click="resetSearchView"
             >
                 BACK TO SEARCH
             </button>
-            <!-- Lets add the return to search button-->
-
-
         </section>
       </main>
 
@@ -279,6 +269,12 @@ const api = axios.create({
 const isSearchDisabled = computed(
   () => isSearching.value || query.value.trim().length === 0,
 )
+
+const isMobile = ref(window.innerWidth <= 767)
+
+window.addEventListener('resize', () => {
+    isMobile.value = window.innerWidth <= 767
+})
 
 function setSearchType(type) {
   if (type === searchType.value) {

@@ -196,14 +196,6 @@ body {
     padding: 0;
 }
 
-.result-back-arrow {
-    display: none;
-}
-
-.result-back-button {
-    display: none;
-}
-
 .result-item {
     display: flex;
     justify-content: space-between;
