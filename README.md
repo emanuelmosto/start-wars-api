@@ -39,7 +39,7 @@ scoop install make
 Clone the repository
 ```
 git clone <repository-url>
-cd laravel-vue-docker-starter
+cd start-wars-api
 ```
 
 Enviroment variables
@@ -63,42 +63,30 @@ Stop all containers
 make down
 ```
 
-View container logs
+Additional Commands:
+
+
 ```
-make logs
+make logs                       -> View container logs
+
+make shell                      -> Open a shell inside the Laravel container
+
+make migrate                    -> Run database migrations
+
+make artisan cmd="route:list"   -> Run any Artisan command
+
+make npm-install                -> Install frontend dependencies manually (if needed)
+
+make dev                        -> Start only the Vite dev server
+
+make build                      -> Build frontend assets (production-like)
 ```
 
-Open a shell inside the Laravel container
-```
-make shell
-```
+In order to Run and test this app, just:
 
-Run database migrations
+## Run the application
 ```
-make migrate
-```
+make up
 
-Run any Artisan command
-```
-make artisan cmd="route:list"
-```
-
-Install frontend dependencies manually (if needed)
-```
-make npm-install
-```
-
-Start only the Vite dev server
-```
-make dev
-```
-
-Build frontend assets (production-like)
-```
-make build
-```
-
-Open the application
-```
 http://localhost
 ```
