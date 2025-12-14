@@ -87,8 +87,8 @@ body {
 
 .search-title {
     font-size: 0.9rem;
-    font-weight: 600;
     margin: 0 0 0.75rem;
+    color: #383838;
 }
 
 .search-type-toggle {
@@ -157,7 +157,6 @@ body {
 }
 
 /* ---- Results panel ---- */
-
 .results-header {
     display: flex;
     flex-direction: column;
@@ -195,6 +194,14 @@ body {
     list-style: none;
     margin: 1.25rem 0 0;
     padding: 0;
+}
+
+.result-back-arrow {
+    display: none;
+}
+
+.result-back-button {
+    display: none;
 }
 
 .result-item {
@@ -372,6 +379,10 @@ body {
         width: 100%;
     }
 
+    .card {
+        border: none;
+    }
+
     /* In mobile, the search area is not inside a visible card box */
     .card.search-card {
         border: none;
@@ -407,6 +418,11 @@ body {
         text-align: center;
     }
 
+    .strech {
+        width: 100%;
+        margin-top: 30px;
+    }
+
     .details-body {
         flex-direction: column;
         gap: 1.25rem;
@@ -430,10 +446,23 @@ body {
         flex-shrink: 0;
     }
 
+    .app-root.has-searched .search-input-row {
+        display: none;
+    }
+
     .search-button {
         margin-top: auto; /* push to bottom of available space */
         margin-bottom: 1.75rem;
-        background-color: #7b7b7b;
         color: #ffffff;
+    }
+
+    .search-button--hide-on-mobile-when-busy {
+        display: none;
+    }
+
+    .results-back-arrow {
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
     }
 }

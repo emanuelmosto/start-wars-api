@@ -1,6 +1,15 @@
 <template>
   <div class="app-root" :class="{ 'has-searched': hasSearched }">
     <header class="app-topbar">
+        <button
+            v-if="!isSearching && hasSearched"
+            type="button"
+            class="result-back-arrow"
+            @click="resetSearchView"
+            aria-label="Back to Search"
+        >
+            <
+        </button>
       <div class="app-logo">SWStarter</div>
     </header>
 
@@ -43,8 +52,10 @@
             </div>
 
             <button
+                v-if="!hasSearched"
               type="submit"
               class="search-button"
+              :class="{ 'search-button--hide-on-mobile-when-busy': isSearching }"
               :disabled="isSearchDisabled"
             >
               <span v-if="isSearching">Searching...</span>
@@ -73,6 +84,13 @@
             <p class="results-helper">
               Use the form to search for People or Movies.
             </p>
+              <button
+                  type="button"
+                  class="back-primary-button"
+                  @click="backToSearch"
+              >
+                  Back to search
+              </button>
           </div>
 
           <div
@@ -80,7 +98,8 @@
             class="results-empty"
           >
             <p>There are zero matches.</p>
-            <p class="results-helper">Try a different search term.</p>
+            <p class="results-helper">Use the form to search for People or Movies.</p>
+
           </div>
 
           <ul v-else class="results-list" aria-label="Search results">
@@ -100,7 +119,19 @@
                 See details
               </button>
             </li>
+
           </ul>
+            <button
+                v-if="!isSearching && hasSearched"
+                type="button"
+                class="result-button strech"
+                @click="resetSearchView"
+            >
+                BACK TO SEARCH
+            </button>
+            <!-- Lets add the return to search button-->
+
+
         </section>
       </main>
 
@@ -270,6 +301,7 @@ async function onSearch() {
   mode.value = 'search'
   selectedPerson.value = null
   selectedMovie.value = null
+  hasSearched.value = true
 
   try {
     const response = await api.get('/search', {
@@ -282,7 +314,6 @@ async function onSearch() {
     results.value = Array.isArray(response.data?.results)
       ? response.data.results
       : []
-    hasSearched.value = true
   } catch (err) {
     console.error(err)
     error.value = 'Something went wrong while searching. Please try again.'
@@ -297,6 +328,12 @@ function backToSearch() {
   selectedMovie.value = null
 }
 
+function resetSearchView() {
+    hasSearched.value = false
+    results.value = []
+    error.value = ''
+    isSearching.value = false
+}
 async function openDetails(item) {
   if (!item || !item.id || !item.type) {
     return
